@@ -76,8 +76,8 @@ build() {
 }
 
 package_opencv-gstreamer-rpitwo() {
-  provides=('opencv')
-  conflicts=('opencv')
+  provides=('opencv' 'opencv-gstreamer')
+  conflicts=('opencv' 'opencv-gstreamer')
   options=('staticlibs')
 
   cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpitwo//)"-$pkgver"
@@ -100,10 +100,10 @@ package_opencv-gstreamer-rpitwo() {
 }
 
 package_opencv-gstreamer-rpitwo-samples() {
-  provides=('opencv-samples')
-  conflicts=('opencv-samples')
+  provides=('opencv-samples' 'opencv-gstreamer-samples')
+  conflicts=('opencv-samples' 'opencv-gstreamer-samples')
   pkgdesc+=" (samples)"
-  depends=("opencv-gstreamer=$pkgver") # sample codes change with lib/API
+  depends=("opencv-gstreamer-rpitwo=$pkgver") # sample codes change with lib/API
   unset optdepends
 
   mkdir -p "$pkgdir/usr/share/opencv"
