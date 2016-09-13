@@ -10,8 +10,8 @@ pkgdesc="Open Source Computer Vision Library"
 arch=('armv7h')
 license=('BSD')
 url="http://opencv.org/"
-depends=('openexr' 'xine-lib' 'libdc1394' 'gtkglext' 'gstreamer' 'gst-libav' 'ffmpeg' 'libx264' 'x264' 'gdal' 'libgphoto2' 'intel-tbb')
-makedepends=('cmake' 'python-numpy' 'python2-numpy' 'mesa' 'eigen')
+depends=('openexr' 'xine-lib' 'libdc1394' 'gtkglext' 'gstreamer' 'gst-libav' 'ffmpeg' 'libx264' 'x264' 'gdal' 'libgphoto2' 'intel-tbb' 'hdf5-cpp-fortran' 'python-h5py' 'python2-h5py')
+makedepends=('cmake' 'python-numpy' 'python2-numpy' 'mesa' 'eigen' 'hdf5-cpp-fortran' 'python-h5py' 'python2-h5py')
 optdepends=('opencv-samples'
             'eigen'
             'libcl: For coding with OpenCL'
