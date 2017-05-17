@@ -4,29 +4,26 @@
 
 pkgbase=opencv
 pkgname=('opencv-gstreamer-rpitwo' 'opencv-gstreamer-rpitwo-samples')
-pkgver=3.1.0
-pkgrel=3
+pkgver=3.2.0
+pkgrel=1
 pkgdesc="Open Source Computer Vision Library"
 arch=('armv7h')
 license=('BSD')
 url="http://opencv.org/"
-depends=('openexr' 'xine-lib' 'libdc1394' 'gtkglext' 'gstreamer' 'gst-libav' 'ffmpeg' 'libx264' 'x264' 'gdal' 'libgphoto2')
-makedepends=('cmake' 'python-numpy' 'python2-numpy' 'mesa' 'eigen')
+depends=('openexr' 'xine-lib' 'libdc1394' 'gtkglext' 'gstreamer' 'gst-libav' 'ffmpeg' 'libx264' 'x264' 'gdal' 'libgphoto2' 'intel-tbb' 'hdf5-cpp-fortran' 'python-h5py' 'python2-h5py' 'protobuf' 'google-glog' 'doxygen' 'cpio' 'lzop' 'p7zip' 'unrar' 'unzip' 'zip')
+makedepends=('cmake' 'python-numpy' 'python2-numpy' 'mesa' 'eigen' 'hdf5-cpp-fortran' 'python-h5py' 'python2-h5py' 'libclc')
 optdepends=('opencv-samples'
             'eigen'
             'libcl: For coding with OpenCL'
             'python-numpy: Python 3 interface'
             'python2-numpy: Python 2 interface')
 source=("$pkgbase-$pkgver.tar.gz::https://github.com/Itseez/opencv/archive/$pkgver.zip"
-        "opencv_contrib-$pkgver.tar.gz::https://github.com/Itseez/opencv_contrib/archive/$pkgver.tar.gz"
-        '5852.patch'
-        'opencv_a0fdc91a14f07de25d858037940fcd3ba859b4e2.patch')
-md5sums=('6082ee2124d4066581a7386972bfd52a'
-         'a822839ad3ab79ff837c16785ea9dd10'
-         '5bd9cd736b171c15cedee3a32a0c47ff'
-         'aebe7878a572a2dc26a434bf08b8d851')
+        "opencv_contrib-$pkgver.tar.gz::https://github.com/Itseez/opencv_contrib/archive/$pkgver.tar.gz")
+md5sums=('bfc6a261eb069b709bcfe7e363ef5899'
+         'd7d50c70c31df3b31310f548f31fd2a2')
 
-_cmakeopts=('-D WITH_OPENGL=ON'
+_cmakeopts=('-D WITH_OPENCL=ON'
+            '-D WITH_OPENGL=ON'
             '-D WITH_TBB=ON'
             '-D WITH_V4L=ON'
             '-D WITH_QT=OFF'
@@ -41,11 +38,25 @@ _cmakeopts=('-D WITH_OPENGL=ON'
             '-D BUILD_EXAMPLES=ON'
             '-D INSTALL_C_EXAMPLES=ON'
             '-D INSTALL_PYTHON_EXAMPLES=ON'
+            '-D BUILD_opencv_python2=ON',
+            '-D BUILD_opencv_python3=ON',
             '-D CMAKE_BUILD_TYPE=Release'
             '-D CMAKE_INSTALL_PREFIX=/usr'
             '-D CMAKE_SKIP_RPATH=ON'
             '-D ENABLE_VFPV3=ON'
             '-D ENABLE_NEON=ON'
+            '-D BUILD_opencv_dnn=ON'
+            '-D BUILD_LIBPROTOBUF_FROM_SOURCES=ON'
+            '-D BUILD_opencv_face=ON'
+            '-D BUILD_opencv_ml=ON'
+            '-D ENABLE_SSE=OFF'
+            '-D ENABLE_SSE2=OFF'
+            '-D ENABLE_SSE3=OFF'
+            '-D ENABLE_PRECOMPILED_HEADERS=OFF'
+            #'-D BUILD_opencv_world=ON'
+            #'-D BUILD_opencv_contrib_world=ON'
+            #'-D BUILD_opencv_world=ON'
+            #'-D WITH_CUDA=OFF'
             #'-D WITH_IPP=ON'             '-D FORCE_VTK=ON'
             #'-D INSTALL_CREATE_DISTRIB=ON'
             )
@@ -58,11 +69,6 @@ _cmakeopts=('-D WITH_OPENGL=ON'
 
 prepare() {
   cd "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpitwo//)"-$pkgver"
-  patch -p1 -i "$srcdir/5852.patch"
-  # Patch gcc 6.1.1 -isystem compilation problem with c std headers, see https://github.com/Itseez/opencv/issues/6517
-  patch -p1 -i "$srcdir/opencv_a0fdc91a14f07de25d858037940fcd3ba859b4e2.patch"
-  # Vtk 7 need use of vtkRenderingOpenGL2 instead of vtkRenderingOpenGL
-  sed -i -e "s/\(vtkRenderingOpenGL\)/\12/g" "$srcdir/"$(echo $pkgname | sed -e s/-gstreamer-rpitwo//)"-$pkgver/cmake/OpenCVDetectVTK.cmake"
 }
 
 build() {
